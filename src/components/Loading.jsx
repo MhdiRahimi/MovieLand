@@ -1,7 +1,24 @@
-import React from 'react'
+import { Backdrop } from '@mui/material';
+import React, { useState, useEffect } from 'react';
 
 const Loading = () => {
-  return <span className="loader"></span>;
-}
+  const [open] = useState(true);
 
-export default Loading
+  return (
+    <>
+      <Backdrop
+        open={open}
+        sx={{
+          minHeight: '100vh',
+          backgroundColor: '#dcdcdc',
+          zIndex: '2000',
+          
+        }}
+      >
+        <span className="loader"></span>
+      </Backdrop>
+    </>
+  );
+};
+
+export default Loading;

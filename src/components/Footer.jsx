@@ -22,7 +22,7 @@ const Footer = () => {
           sx={{
             display: 'grid',
 
-            mt: '2rem',
+            mt: '4rem',
           }}
         >
           <div
@@ -36,15 +36,7 @@ const Footer = () => {
             }}
           >
             <Tooltip title="whatsapp" arrow placement="top">
-              <IconButton
-                size="small"
-                sx={{
-                  '&.MuiIconButton-root': {
-                    padding: '1rem',
-                    mt: '1rem',
-                  },
-                }}
-              >
+              <IconButton size="small" sx={style}>
                 <WhatsAppIcon
                   fontSize="medium"
                   sx={{
@@ -60,15 +52,7 @@ const Footer = () => {
               </IconButton>
             </Tooltip>
             <Tooltip title="email" arrow placement="top">
-              <IconButton
-                size="small"
-                sx={{
-                  '&.MuiIconButton-root': {
-                    padding: '0.8rem',
-                    mt: '1rem',
-                  },
-                }}
-              >
+              <IconButton size="small" sx={style}>
                 <EmailIcon
                   fontSize="medium"
                   sx={{
@@ -84,15 +68,7 @@ const Footer = () => {
               </IconButton>
             </Tooltip>
             <Tooltip title="telegram" arrow placement="top">
-              <IconButton
-                size="small"
-                sx={{
-                  '&.MuiIconButton-root': {
-                    padding: '0.8rem',
-                    mt: '1rem',
-                  },
-                }}
-              >
+              <IconButton size="small" sx={style}>
                 <TelegramIcon
                   fontSize="medium"
                   sx={{
@@ -109,15 +85,7 @@ const Footer = () => {
             </Tooltip>
 
             <Tooltip title="instagram" arrow placement="top">
-              <IconButton
-                size="small"
-                sx={{
-                  '&.MuiIconButton-root': {
-                    padding: '0.8rem',
-                    mt: '1rem',
-                  },
-                }}
-              >
+              <IconButton size="small" sx={style}>
                 <InstagramIcon
                   fontSize="medium"
                   sx={{
@@ -147,7 +115,7 @@ const Footer = () => {
             <Typography
               sx={{ color: '#ff4779', fontStyle: 'italic', mx: '0.8rem' }}
             >
-              Fun <span style={{ color: '#57cc99' }}>Movies</span>
+              Movie <span style={{ color: '#57cc99' }}>Land</span>
             </Typography>
           </div>
         </Container>
@@ -157,3 +125,9 @@ const Footer = () => {
 };
 
 export default Footer;
+const style = {
+  '&.MuiIconButton-root': {
+    padding: '1rem',
+    mt: '3rem',
+  },
+};

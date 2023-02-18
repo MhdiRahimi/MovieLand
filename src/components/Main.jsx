@@ -1,47 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Container,
-  Typography,
-  Box,
-  Pagination,
-  Modal,
-  Button,
-  IconButton,
-} from '@mui/material';
-
-import Header from './Header';
-import MovieCards from './MovieCards';
+import React, { useState } from 'react';
+import { Avatar, Box, Button } from '@mui/material';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
-import PopularMovies from './PopularMovies';
-import PopularSeries from './PopularSeries';
-import Footer from './Footer';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css';
-import Category from './CategorySeries';
-
-import NotFound from './NotFound';
-
-import {
-  Route,
-  Routes,
-  useSearchParams,
-  useParams,
-  NavLink,
-  useNavigate,
-} from 'react-router-dom';
+import { Route, Routes, useParams, useNavigate } from 'react-router-dom';
 import Home from './Home';
 import Titlemod from './Titlemod';
-import Paginationstyle from './Paginationstyle';
 import SearchMovie from './SearchMovie';
 import SearchSeries from './SearchSeries';
-import CategoryMovies from './CategoryMovies';
-import CategorySeries from './CategorySeries';
-import Loading from './Loading';
-import TestCard from './TestCard';
-
-const Main = ({ main, query, mod, gen, setGen, }) => {
+import Cards from './Cards';
+import Category from './Category';
+import { motion } from 'framer-motion';
+const Main = ({ query, mod, gen, setGen }) => {
   let param = useParams();
   const { name } = param;
   let { genres } = useParams();
@@ -49,83 +19,84 @@ const Main = ({ main, query, mod, gen, setGen, }) => {
   let { genre } = useParams();
   let navigate = useNavigate();
 
-  // const { data: pMovie, isLoading ,refetch : fetch} = useQuery(
-  //   ['popularMovies', page],
+  const [scrollbtn, setScrollBtn] = useState(false);
 
-  //   async () => {
-  //     const res = await axios.get(
-  //       `https://api.themoviedb.org/3/tv/popular?api_key=${process.env.REACT_APP_KEY}&language=en-US&page=${page}`
-  //     );
-  //     return res.data;
-  //   }
-  // );
-  // const { data: popularSeries } = useQuery(['pSeries', page], async () => {
-  //   const res = await axios.get(
-  //     `https://api.themoviedb.org/3/tv/popular?api_key=${process.env.REACT_APP_KEY}&language=en-US&page=${page}`
-  //   );
-  //   return res.data;
-  // });
-  // const { data: topSeries, isLoading: loading } = useQuery(
-  //   ['tSeries', page],
-  //   async () => {
-  //     const res = await axios.get(
-  //       `https://api.themoviedb.org/3/${main}/top_rated?api_key=${process.env.REACT_APP_KEY}&language=en-US&page=${page}`
-  //     );
-  //     return res.data;
-  //   }
-  // );
-  // const { data: topMovies } = useQuery(['tMovies', page], async () => {
-  //   const res = await axios.get(
-  //     `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.REACT_APP_KEY}&language=en-US&page=${page}`
-  //   );
-  //   return res.data;
-  // });
+  const scrollBtnDisplay = function () {
+    window.scrollY > window.innerHeight
+      ? setScrollBtn(true)
+      : setScrollBtn(false);
+  };
+  window.addEventListener('scroll', scrollBtnDisplay);
+
+  const scrollUp = () => {
+    window.scrollTo({
+      top: '0',
+      behavior: 'smooth',
+    });
+  };
 
   let movies = [];
   for (let i = 0; i < 1; i++) {
     movies.push(query?.results[i]);
   }
-  
-  console.log(main);
+
   return (
     <>
       <Grid2
-        rowGap={5}
         container
         sx={{
-          marginTop: '3rem',
+          marginTop: '4rem',
           paddingBottom: '3rem',
           width: '100%',
           justifyContent: 'center',
           alignItems: 'center',
         }}
       >
+        {scrollbtn && (
+          <Grid2
+            sx={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              position: 'fixed',
+              bottom: '1rem',
+              left: '0rem',
+              right: '1rem',
+              zIndex: '3000',
+            }}
+            component={motion.div}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Avatar
+              component={motion.div}
+              whileHover={{ backgroundColor: '#721f35' }}
+              onClick={scrollUp}
+              sx={{
+                backgroundColor: '#ff4779',
+                '&.MuiAvatar-root': {
+                  cursor: 'pointer',
+                },
+              }}
+            >
+              <KeyboardArrowUpIcon sx={{ color: '#dcdcdc' }} />
+            </Avatar>
+          </Grid2>
+        )}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route
             path={`popularseries`}
             element={
               <>
-                <Titlemod title={'Popular Series'} color={'#dcdcdc'} />
-                {/* <Grid2
-                  rowGap={3}
-                  container
-                  sx={{
-                    width: '100%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  {pMovie?.results.map((pseries, i) => {
-                    return <PopularSeries pseries={pseries} key={i} />;
-                  })}
-                </Grid2>{' '} */}{' '}
-                <TestCard
-                  mediaType={'tv'}
-                  part={'popular'}
-                  
+                <Titlemod
+                  title={'Popular Series'}
+                  color={'#dcdcdc'}
+                  margin={'-24rem'}
                 />
-                
+
+                <Cards mediaType={'tv'} part={'popular'} />
               </>
             }
           />
@@ -133,26 +104,13 @@ const Main = ({ main, query, mod, gen, setGen, }) => {
             path={'topseries'}
             element={
               <>
-                <Titlemod title={'Top Series'} color={'#dcdcdc'} />
-                {/* <Grid2
-                  rowGap={3}
-                  container
-                  sx={{
-                    width: '100%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  {topSeries?.results.map((pseries, i) => {
-                    return <PopularSeries pseries={pseries} key={i} />;
-                  })}
-                </Grid2>{' '} */}{' '}
-                <TestCard
-                  mediaType={'tv'}
-                  part={'top_rated'}
-                
+                <Titlemod
+                  title={'Top Series'}
+                  color={'#dcdcdc'}
+                  margin={'-24rem'}
                 />
-                {/* <Paginationstyle page={page} setPage={setPage} /> */}
+
+                <Cards mediaType={'tv'} part={'top_rated'} />
               </>
             }
           />
@@ -160,28 +118,13 @@ const Main = ({ main, query, mod, gen, setGen, }) => {
             path={'topmovies'}
             element={
               <>
-                <Titlemod title={'Top Movies'} color={'#dcdcdc'} />
-                {/* <Grid2
-                  rowGap={3}
-                  container
-                  sx={{
-                    width: '100%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  {topSeries?.results.map((popularMovie, i) => {
-                    return (
-                      <PopularMovies popularMovie={popularMovie} key={i} />
-                    );
-                  })}
-                </Grid2> */}{' '}
-                <TestCard
-                  mediaType={'movie'}
-                  part={'top_rated'}
-                 
+                <Titlemod
+                  title={'Top Movies'}
+                  color={'#dcdcdc'}
+                  margin={'-24rem'}
                 />
-                {/* <Paginationstyle page={page} setPage={setPage} /> */}
+
+                <Cards mediaType={'movie'} part={'top_rated'} />
               </>
             }
           />
@@ -190,83 +133,62 @@ const Main = ({ main, query, mod, gen, setGen, }) => {
             path={'popularmovies'}
             element={
               <>
-                <Titlemod title={'Popular Movies'} color={'#dcdcdc'} />
-                {/* <Grid2
-                  rowGap={3}
+                <Titlemod
+                  title={'Popular Movies'}
+                  color={'#dcdcdc'}
+                  margin={'-24rem'}
+                />
+
+                <Cards mediaType={'movie'} part={'popular'} />
+              </>
+            }
+          />
+
+          <Route
+            path={`query/movie/:name`}
+            element={
+              <Grid2
+                rowGap={1}
+                container
+                sx={{
+                  width: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                {movies?.map((popularMovie, i) => {
+                  return (
+                    <SearchMovie
+                      popularMovie={popularMovie}
+                      mod={mod}
+                      key={i}
+                    />
+                  );
+                })}
+              </Grid2>
+            }
+          />
+
+          <Route
+            path={`query/tv/:name`}
+            element={
+              <>
+                <Grid2
+                  rowGap={1}
                   container
                   sx={{
                     width: '100%',
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}
-                > */}
-                {/* {pMovie?.results.map((popularMovie, i) => {
-                    return (
-                      <PopularMovies popularMovie={popularMovie} key={i} />
-                    );
-                  })} */}
-                {/* </Grid2> */}
-                <TestCard
-                  mediaType={'movie'}
-                  part={'popular'}
-                 
-                />
-                {/* <Paginationstyle page={page} setPage={setPage} /> */}
+                >
+                  {movies?.map((pseries, i) => {
+                    return <SearchSeries pseries={pseries} mod={mod} key={i} />;
+                  })}
+                </Grid2>
               </>
             }
           />
-
-          {mod === 'movie' ? (
-            <Route
-              path={`query/:name`}
-              element={
-                <>
-                  <Grid2
-                    rowGap={1}
-                    container
-                    sx={{
-                      width: '100%',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    {movies?.map((popularMovie, i) => {
-                      return (
-                        <SearchMovie
-                          popularMovie={popularMovie}
-                          mod={mod}
-                          key={i}
-                        />
-                      );
-                    })}
-                  </Grid2>
-                </>
-              }
-            />
-          ) : (
-            <Route
-              path={'query/:name'}
-              element={
-                <>
-                  <Grid2
-                    rowGap={1}
-                    container
-                    sx={{
-                      width: '100%',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    {movies?.map((pseries, i) => {
-                      return (
-                        <SearchSeries pseries={pseries} mod={mod} key={i} />
-                      );
-                    })}
-                  </Grid2>
-                </>
-              }
-            />
-          )}
 
           {gen === 'movie' ? (
             <Route
@@ -276,18 +198,22 @@ const Main = ({ main, query, mod, gen, setGen, }) => {
                   <Box
                     sx={{
                       minWidth: '100%',
+                      mt: '-4rem',
+
                       display: 'flex',
-                      mt: '3rem',
-                      ml: '8rem',
+                      justifyContent: 'center',
+                      justifySelf: 'center',
                     }}
                   >
                     <Button
-                      color="primary"
                       sx={{
-                        justifyContent: 'start',
-                        justifySelf: 'start',
+                        color: '#dcdcdc',
+                        backgroundColor: '#ff4779',
                         '&.MuiButton-root:hover': {
                           backgroundColor: '#35185A',
+                        },
+                        '&.MuiButton-root': {
+                          border: 'none',
                         },
                       }}
                       size="small"
@@ -300,7 +226,7 @@ const Main = ({ main, query, mod, gen, setGen, }) => {
                       category Series
                     </Button>
                   </Box>
-                  <CategoryMovies />
+                  <Category gen={gen} />
                 </>
               }
             />
@@ -312,19 +238,22 @@ const Main = ({ main, query, mod, gen, setGen, }) => {
                   <Box
                     sx={{
                       minWidth: '100%',
-                      mt: '3rem',
-                      ml: '8rem',
+                      mt: '-4rem',
+
                       display: 'flex',
+                      justifyContent: 'center',
+                      justifySelf: 'center',
                     }}
                   >
                     <Button
-                      color="primary"
                       sx={{
-                        justifyContent: 'start',
-                        justifySelf: 'start',
-
+                        color: '#dcdcdc',
+                        backgroundColor: '#ff4779',
                         '&.MuiButton-root:hover': {
                           backgroundColor: '#35185A',
+                        },
+                        '&.MuiButton-root': {
+                          border: 'none',
                         },
                       }}
                       size="small"
@@ -337,24 +266,15 @@ const Main = ({ main, query, mod, gen, setGen, }) => {
                       category Movies
                     </Button>
                   </Box>
-                  <CategorySeries setGen={setGen} />
+                  <Category gen={gen} />
                 </>
               }
             />
           )}
 
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<Home />} />
         </Routes>
       </Grid2>
-
-      {/* <button
-          onClick={() => setActive(!active)}
-          className={`hamburger hamburger--spin ${active ? 'is-active' : ''}`}
-        >
-          <span className="hamburger-box ">
-            <span className="hamburger-inner "></span>
-          </span>
-        </button> */}
     </>
   );
 };

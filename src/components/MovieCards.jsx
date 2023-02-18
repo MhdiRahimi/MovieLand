@@ -1,6 +1,6 @@
-import { Card, CardMedia, Tooltip, Box } from '@mui/material';
+import { Card, CardMedia, Tooltip, useMediaQuery } from '@mui/material';
 import React from 'react';
-
+import { useNavigate, useParams } from 'react-router-dom';
 const MovieCards = (trendMovie) => {
   let title;
   if (trendMovie?.trendMovie?.media_type === 'movie') {
@@ -8,11 +8,31 @@ const MovieCards = (trendMovie) => {
   } else {
     title = trendMovie?.trendMovie?.name;
   }
+  let navigate = useNavigate();
+  function detailSearch() {
+    if (trendMovie?.trendMovie?.media_type === 'movie') {
+      navigate(`query/movie/${title}`, {
+        state: {
+          id: trendMovie?.trendMovie?.id,
+          mod: 'movie',
+        },
+      });
+    } else {
+      navigate(`query/tv/${title}`, {
+        state: {
+          id: trendMovie?.trendMovie?.id,
+          mod: 'tv',
+        },
+      });
+    }
+  }
 
+  const matches = useMediaQuery('(min-width:600px)');
   return (
     <>
       <Tooltip arrow title={title} placement="top-start" followCursor>
         <Card
+          onClick={detailSearch}
           sx={{
             m: '1rem',
             cursor: 'pointer',
@@ -28,14 +48,13 @@ const MovieCards = (trendMovie) => {
               border: '4px solid transparent',
               transition: 'all ease-out 0.3s',
               scale: '1.1',
-              
             },
           }}
         >
           <CardMedia
             component="img"
-            height="205px"
-            image={`https://image.tmdb.org/t/p/w500/${trendMovie?.trendMovie?.poster_path}`}
+            height={matches ? '205' : '250'}
+            image={`https://image.tmdb.org/t/p/w300/${trendMovie?.trendMovie?.poster_path}`}
             width="135px"
             alt="imgs"
           />

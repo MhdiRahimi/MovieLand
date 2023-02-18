@@ -1,14 +1,22 @@
-import { Box, ToggleButtonGroup, ToggleButton } from '@mui/material';
+import {
+  Box,
+  ToggleButtonGroup,
+  ToggleButton,
+  useMediaQuery,
+} from '@mui/material';
 import React, { useState } from 'react';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import axios from 'axios';
 import IconButton from '@mui/material/IconButton';
 import classes from './searchbar.module.css';
 import { NavLink } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 const SearchBar = ({ pullData }) => {
   const [mod, setMod] = useState('movie');
   const [input, setInput] = useState('');
+
+  const matches = useMediaQuery('(min-width:600px)');
 
   const inputHandler = async (e) => {
     e.preventDefault();
@@ -21,17 +29,28 @@ const SearchBar = ({ pullData }) => {
   const changeMod = (e) => {
     setMod(e.target.value);
   };
-  console.log(input);
+
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.8 }}
+    >
       <ToggleButtonGroup
         size="small"
         color="primary"
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          mt: '3rem',
-        }}
+        style={
+          !matches
+            ? {
+                paddingTop: '2rem',
+                position: 'relative',
+                display: 'flex',
+                justifyContent: 'center',
+                marginTop: '4rem',
+              }
+            : toggleBtn
+        }
         value={mod}
         exclusive
         onChange={changeMod}
@@ -52,7 +71,6 @@ const SearchBar = ({ pullData }) => {
           value={input}
           placeholder={`Search ${mod === 'tv' ? 'series' : 'movie'}...`}
           className={classes.inr}
-          // onChange={(e) => setSearchParams({ q: e.target.value })}
           onChange={(e) => setInput(e.target.value)}
         />
         <IconButton
@@ -67,7 +85,7 @@ const SearchBar = ({ pullData }) => {
             },
           }}
         >
-          <NavLink to={`/query/${input}`}>
+          <NavLink to={`/query/${mod}/${input}`}>
             <SearchRoundedIcon
               color="secondary"
               fontSize="medium"
@@ -81,8 +99,9 @@ const SearchBar = ({ pullData }) => {
           </NavLink>
         </IconButton>
       </Box>
-    </>
+    </motion.div>
   );
 };
 
+const toggleBtn = { display: 'flex', justifyContent: 'center', marginTop: '4rem' };
 export default SearchBar;
