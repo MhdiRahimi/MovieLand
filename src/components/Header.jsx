@@ -5,14 +5,13 @@ import {
   ButtonGroup,
   useMediaQuery,
   SwipeableDrawer,
-  Typography,
-  Box,
+
 } from '@mui/material';
 import Logo from '../assets/logo.svg';
 import { Link, NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
-import { margin } from '@mui/system';
+
 
 const Header = ({ main, setMain, gen }) => {
   const [active, setActive] = useState(false);
@@ -30,12 +29,7 @@ const Header = ({ main, setMain, gen }) => {
   };
   const activeLink = `#57cc99 `;
 
-  const scrollDown = () => {
-    window.scrollTo({
-      top: '5000000000',
-      behavior: 'smooth',
-    });
-  };
+
   return (
     <>
       <motion.div
@@ -74,7 +68,10 @@ const Header = ({ main, setMain, gen }) => {
           >
             <img src={Logo} alt="logo" width={40} height={40} />
             <span style={{ color: '#57cc99' }}>Movie </span>
-            <span style={{ color: '#392f5a',marginLeft:'0.3rem' }}> Land</span>
+            <span style={{ color: '#392f5a', marginLeft: '0.3rem' }}>
+              {' '}
+              Land
+            </span>
           </Button>
         </NavLink>
 
@@ -129,11 +126,7 @@ const Header = ({ main, setMain, gen }) => {
                   aria-label="outlined button group"
                   onClick={() => setActive(false)}
                 >
-                  <NavLink to="/contact" style={linkMob}>
-                    <Button onClick={scrollDown} style={linkMob}>
-                      Contact
-                    </Button>
-                  </NavLink>
+                 
                   <NavLink to={`category/${gen}`} style={linkMob}>
                     <Button style={linkMob}>Category</Button>
                   </NavLink>
@@ -172,36 +165,7 @@ const Header = ({ main, setMain, gen }) => {
             }}
           >
             <ButtonGroup variant="none" aria-label="outlined button group">
-              <NavLink
-                to="/contact"
-                style={({ isActive }) =>
-                  isActive
-                    ? {
-                        color: activeLink,
-                        fontSize: '2rem',
-                        display: 'inline',
-                        mt: '1rem',
-
-                        textDecoration: 'none',
-                      }
-                    : {
-                        color: '#dcdcdc',
-                        fontSize: '2rem',
-                        display: 'inline',
-                        mt: '1rem',
-                        textDecoration: 'none',
-                      }
-                }
-              >
-                <Button
-                  onClick={scrollDown}
-                  sx={{
-                    textTransform: 'capitalize',
-                  }}
-                >
-                  Contact
-                </Button>
-              </NavLink>
+            
               <NavLink
                 to={`category/${gen}`}
                 style={({ isActive }) =>
@@ -355,20 +319,3 @@ const linkMob = {
   padding: '1rem',
   textTransform: 'capitalize',
 };
-
-// style={({ isActive }) =>
-//                     isActive
-//                       ? {
-//                           color: activeLink,
-//                           fontSize: '2rem',
-
-//                           textDecoration: 'none',
-//                         }
-//                       : {
-//                           color: '#dcdcdc',
-//                           fontSize: '2rem',
-
-//                           mt: '1rem',
-//                           textDecoration: 'none',
-//                         }
-//                   }

@@ -17,7 +17,7 @@ import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 const Footer = () => {
   return (
     <>
-      <div className="footer">
+      <div className="footer" id='footer'>
         <Container
           sx={{
             display: 'grid',

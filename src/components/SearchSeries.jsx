@@ -24,7 +24,7 @@ import { useLocation } from 'react-router-dom';
 
 const SearchSeries = ({ pseries, mod }) => {
   const location = useLocation();
-  const matches = useMediaQuery('(min-width:600px)');
+  const matches = useMediaQuery('(min-width:1200px)');
   let id = pseries?.id || location?.state?.id;
   let mods = location?.state?.mod || mod;
   console.log(location);
