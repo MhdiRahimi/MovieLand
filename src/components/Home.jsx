@@ -89,15 +89,26 @@ const Home = ({ gen }) => {
       <Grid
         item
         xs={4}
-        sx={{
-          maxWidth: '55%',
-          height: '75vh',
-          mb: '1rem',
-          mt: '1rem',
-          bgcolor: 'rgba(196, 108, 255, 0.1)',
-          borderRadius: '1rem',
-          px: '30px',
-        }}
+        sx={
+          matches
+            ? {
+                maxWidth: '55%',
+                height: '75vh',
+                mb: '1rem',
+                mt: '1rem',
+                bgcolor: 'rgba(196, 108, 255, 0.1)',
+                borderRadius: '1rem',
+                px: '30px',
+              }
+            : {
+                maxWidth: '95%',
+                height: '75vh',
+                mb: '1rem',
+                mt: '1rem',
+                bgcolor: 'rgba(196, 108, 255, 0.1)',
+                borderRadius: '1rem',
+              }
+        }
       >
         {' '}
         <h3
