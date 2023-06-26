@@ -46,7 +46,7 @@ html {
     border-radius: 0 0 50% 50%;
     position: relative;
     overflow: hidden;
-     min-height: 55vh;
+    min-height: 55vh;
   }
 }
 .footer {
@@ -204,7 +204,6 @@ html {
   border-right: 4px solid transparent;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
-  
 }
 .loader::after {
   content: '';
@@ -230,18 +229,17 @@ html {
 .navlink_category {
   text-decoration: none;
   cursor: pointer;
-  margin: 1rem;
-  margin-bottom: 0;
-  border-bottom: 3px solid #35185a;
-  font-size: 1.3rem;
-  padding: 1rem;
-  padding-bottom: 0;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+color: #35185a;
+  font-size: 18px;
+  padding: 0.1rem;
 }
 .navlink_category:hover {
-  scale: 1.2;
   transition: all ease-out 0.3s;
   color: #ff4779;
-  border-bottom: 3px solid #ff4779;
+
   cursor: pointer;
 }
 .css-1bds708 {

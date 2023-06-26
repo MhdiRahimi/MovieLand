@@ -1,18 +1,27 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
-import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
-import Paginationstyle from './Paginationstyle';
-import { NavLink, useParams } from 'react-router-dom';
-import { Box, Button } from '@mui/material';
-import Titlemod from './Titlemod';
-
-import CardMovieDetails from './CardMovieDetails';
 import Loading from './Loading';
+import CardMovieDetails from './CardMovieDetails';
+import Titlemod from './Titlemod';
+import Paginationstyle from './Paginationstyle';
+import { NavLink, useParams, useNavigate } from 'react-router-dom';
 
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import { Grid, useMediaQuery } from '@mui/material';
 const Category = ({ gen }) => {
-  const [page, setPage] = useState(1);
+  const [value, setValue] = useState(0);
+  const [genress, setGenress] = useState('movie');
+  const [genresId, setGenresId] = useState();
+  const matches = useMediaQuery('(min-width:900px)');
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  let navigate = useNavigate();
 
   const {
     data: categories,
@@ -20,114 +29,138 @@ const Category = ({ gen }) => {
     isLoading: loading,
     isRefetching: fetching,
   } = useQuery(['categoryMovie'], fetchGenre);
+
   async function fetchGenre() {
     const res = await axios.get(
-      `https://api.themoviedb.org/3/genre/${gen}/list?api_key=${process.env.REACT_APP_KEY}`
+      `https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.REACT_APP_KEY}`
     );
     return res?.data;
   }
-  const { data, refetch, isLoading, isRefetching } = useQuery(
-    ['items'],
-   fetchCategory
-  );
 
-  async function fetchCategory() {
+  const {
+    data: categoryTv,
+    refetch: fetchAgain1,
+    isLoading: loading1,
+    isRefetching: fetching1,
+  } = useQuery(['categorytv'], fetchGenre1);
+
+  async function fetchGenre1() {
     const res = await axios.get(
-      `https://api.themoviedb.org/3/discover/${gen}?api_key=${process.env.REACT_APP_KEY}&with_genres=${genresId}&language=en-US&page=${page}`
+      `https://api.themoviedb.org/3/genre/tv/list?api_key=${process.env.REACT_APP_KEY}`
     );
     return res?.data;
   }
 
-  const [genress, setGenress] = useState('movie');
-  const [genresId, setGenresId] = useState();
   let { genres } = useParams();
 
   function infoGenres(name, id) {
+    navigate(`/category/items`, {
+      state: {
+        id: id,
+        mod: 'movie',
+        name: name,
+      },
+    });
+    setGenress(name);
+    setGenresId(id);
+  }
+  function infoGenres1(name, id) {
+    navigate(`/category/items`, {
+      state: {
+        id: id,
+        mod: 'tv',
+        name: name,
+      },
+    });
+
     setGenress(name);
     setGenresId(id);
   }
 
   useEffect(() => {
-    refetch();
-    fetchAgain();
-  }, [gen, page, genresId,]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [gen, genresId]);
+    fetchGenre1();
+    fetchGenre();
+  }, []);
 
   useEffect(() => {
     setGenress('');
   }, [gen]);
 
-  let title;
-  if (gen === 'tv') {
-    title = 'Series';
-  } else {
-    title = 'Movie';
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box sx={{ justifyContent: 'center', mx: 'auto' }}>
+            <Typography>{children}</Typography>
+          </Box>
+        )}
+      </div>
+    );
   }
 
-  if (fetching || isRefetching || loading || isLoading) return <Loading />;
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
+
+  if (fetching || loading) return <Loading />;
+
   return (
     <>
-      <div style={{ width: '100%' }}></div>
-      <Box>
-        {genress ? (
-          <Titlemod
-            title={'Category : ' + genress}
-            color="#dcdcdc"
-            margin={'-10rem'}
-          />
-        ) : (
-          <Titlemod
-            title={'Category : ' + title}
-            color="#dcdcdc"
-            margin={'-10rem'}
-          />
-        )}
+      <Box mt={1}>
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+            indicatorColor="secondary"
+            textColor="secondary"
+          >
+            <Tab label="Movie" {...a11yProps(0)} />
+            <Tab label="Series" {...a11yProps(1)} />
+          </Tabs>
+        </Box>
+        <TabPanel value={value} index={0}>
+          <Grid container item rowSpacing={4} sx={{ my: '2rem' }}>
+            {categories?.genres.map((cat) => (
+              <Grid rowSpacing={4} xs={6}>
+                <Box
+                  className={'navlink_category'}
+                  key={cat.id}
+                  onClick={() => infoGenres(cat.name, cat.id)}
+                >
+                  {cat.name}
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          {' '}
+          <Grid container item rowSpacing={4} sx={{ my: '2rem' }}>
+            {categoryTv?.genres.map((cat) => (
+              <Grid rowSpacing={4} xs={6}>
+                <Box
+                  className={'navlink_category'}
+                  key={cat.id}
+                  onClick={() => infoGenres1(cat.name, cat.id)}
+                >
+                  {cat.name}
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+        </TabPanel>
       </Box>
-      <div style={{ width: '100%' }}></div>
-      <Grid2
-        container
-        sx={{
-          justifyContent: 'center',
-          width: '70%',
-          mt: '1rem',
-          zIndex: '1000',
-        }}
-      >
-        {categories?.genres.map((cat) => (
-          <NavLink
-            className="navlink_category"
-            key={cat.id}
-            onClick={() => infoGenres(cat.name, cat.id)}
-          >
-            {cat.name}
-          </NavLink>
-        ))}
-      </Grid2>
-
-      {data?.results.map((pseries, i) => {
-        return (
-          <Box
-            sx={{
-              p: '0.2rem',
-              mt: '1.5rem',
-              justifyContent: 'space-between',
-
-              borderRadius: '1em',
-              maxWidth: '65%',
-              boxShadow:
-                'box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset',
-            }}
-          >
-            <CardMovieDetails detailInfo={pseries} key={i} />
-          </Box>
-        );
-      })}
-
-      <div style={{ width: '100%' }}></div>
-      {data && <Paginationstyle page={page} setPage={setPage} />}
     </>
   );
 };

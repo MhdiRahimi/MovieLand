@@ -27,7 +27,7 @@ const SearchSeries = ({ pseries, mod }) => {
   const matches = useMediaQuery('(min-width:1200px)');
   let id = pseries?.id || location?.state?.id;
   let mods = location?.state?.mod || mod;
-  console.log(location);
+
   async function detailfetch() {
     if (id) {
       const res = await axios.get(
@@ -46,7 +46,7 @@ const SearchSeries = ({ pseries, mod }) => {
     isLoadingError,
   } = useQuery(['serachMovies'], detailfetch);
 
-  console.log(location);
+
   useEffect(() => {
     refetch();
   }, [id, location?.pathname]);
@@ -83,18 +83,7 @@ const SearchSeries = ({ pseries, mod }) => {
             animate="visible"
             sx={{ height: '60%', justifyContent: 'center' }}
           >
-            <Grid>
-              <Typography
-                gridTemplateRows="auto"
-                textAlign={'center'}
-                sx={{
-                  color: '#35185A',
-                }}
-                variant="h4"
-              >
-                {data?.title}
-              </Typography>
-            </Grid>
+           
             <Grid
               container
               sx={{
@@ -412,7 +401,7 @@ const SearchSeries = ({ pseries, mod }) => {
             <Titlemod color={'#35185A'} title={'Overview'} margin={'2rem'} />
             <Box style={box_overview}>
               <Typography sx={overviewsType}> {data?.overview}</Typography>
-            </Box>{' '}
+            </Box>{' '} <div style={{ width: '100%' }}></div>
             <Recomended movie_id={id} mod={mods} />
           </Grid2>
         </>
@@ -633,6 +622,7 @@ const SearchSeries = ({ pseries, mod }) => {
             <Box style={box_overview}>
               <Typography sx={overviewsType}>{data?.overview}</Typography>
             </Box>
+            <div style={{ width: '100%' }}></div>
             <Recomended movie_id={id} mod={mods} />
           </>
         )

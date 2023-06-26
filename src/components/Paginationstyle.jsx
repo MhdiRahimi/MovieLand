@@ -19,7 +19,7 @@ const Paginationstyle = ({ page, setPage }) => {
         style={{
           display: 'flex',
           justifyContent: 'center',
-          marginTop: '12rem',
+          marginTop: '5rem',
         }}
       >
         <Pagination

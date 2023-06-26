@@ -26,7 +26,7 @@ const SearchMovie = ({ popularMovie, mod }) => {
   const location = useLocation();
   let id = popularMovie?.id || location?.state?.id;
   let mods = location?.state?.mod || mod;
-  console.log(location);
+ 
   const matches = useMediaQuery('(min-width:1200px)');
   async function detailfetch() {
     if (id) {
@@ -374,6 +374,7 @@ const SearchMovie = ({ popularMovie, mod }) => {
                 <Box style={box_overview}>
                   <Typography sx={overviewsType}> {data?.overview}</Typography>
                 </Box>{' '}
+                <div style={{ width: '100%' }}></div>
                 <Recomended movie_id={id} mod={mods} />
               </Grid2>
             </>
@@ -577,6 +578,7 @@ const SearchMovie = ({ popularMovie, mod }) => {
               <Box style={box_overview}>
                 <Typography sx={overviewsType}> {data?.overview}</Typography>
               </Box>{' '}
+              <div style={{ width: '100%' }}></div>
               <Recomended movie_id={id} mod={mods} />
             </>
           )}

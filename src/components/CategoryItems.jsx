@@ -1,64 +1,74 @@
-import { Box, useMediaQuery } from '@mui/material';
-import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Loading from './Loading';
 import CardMovieDetails from './CardMovieDetails';
+import Titlemod from './Titlemod';
 import Paginationstyle from './Paginationstyle';
-
-const Cards = ({ mediaType, part }) => {
+import { NavLink, useParams, useLocation } from 'react-router-dom';
+import { useMediaQuery, Grid, Box } from '@mui/material';
+export default function CategoryItems() {
   const matches = useMediaQuery('(min-width:900px)');
-
+  const [genress, setGenress] = useState('movie');
+  const [genresId, setGenresId] = useState();
   const [page, setPage] = useState(1);
-  const { data, isLoading, refetch, isRefetching } = useQuery(
-    ['pSeries'],
-    fetchData
-  );
-  async function fetchData() {
-    const res = await axios.get(
-      `https://api.themoviedb.org/3/${mediaType}/${part}?api_key=${process.env.REACT_APP_KEY}&language=en-US&page=${page}`
-    );
-    return res.data;
-  }
-  useEffect(() => {
-    refetch();
-  }, [mediaType, part, page]);
-  useEffect(() => {
-    setPage(1);
-  }, [mediaType, part]);
 
-  if (isRefetching || isLoading) return <Loading />;
+  let location = useLocation();
+
+  const { data, refetch, isLoading, isRefetching } = useQuery(
+    ['items'],
+    fetchCategory
+  );
+
+  async function fetchCategory() {
+    const res = await axios.get(
+      `https://api.themoviedb.org/3/discover/${location?.state.mod}?api_key=${process.env.REACT_APP_KEY}&with_genres=${location?.state.id}&language=en-US&page=${page}`
+    );
+    return res?.data;
+  }
+
+  useEffect(() => {
+    fetchCategory();
+    refetch();
+  }, [page, location]);
+
+  if (isLoading && isRefetching) {
+    return <Loading />;
+  }
+
   return (
     <>
+      <Titlemod
+        title={location?.state.name}
+        color={'#dcdcdc'}
+        margin={'-20rem'}
+      />{' '}
       <div style={{ width: '100%' }}></div>
-      <Grid2
-        xs={12}
+      <Grid
         rowGap={5}
-        container
         sx={
           matches === true
             ? {
-                width: '55%',
+                my: '1rem',
                 justifyContent: 'center',
                 alignItems: 'center',
                 mt: '1rem',
+                maxWidth: '55%',
               }
             : {
-                width: '100%',
+                my: '1rem',
                 justifyContent: 'center',
                 alignItems: 'center',
                 mt: '1rem',
+                maxWidth: '100%',
               }
         }
       >
         {data?.results?.map((trendMovie, i) => (
           <Box
-            key={i}
             sx={{
               display: 'grid',
-
-              rowGap: 2,
+              mb: '2rem',
               justifyContent: 'center',
               alignItems: 'center',
               borderRadius: '1em',
@@ -70,11 +80,9 @@ const Cards = ({ mediaType, part }) => {
             <CardMovieDetails detailInfo={trendMovie} key={i} />
           </Box>
         ))}
-      </Grid2>
+      </Grid>
       <div style={{ width: '100%' }}></div>
       <Paginationstyle page={page} setPage={setPage} />
     </>
   );
-};
-
-export default Cards;
+}

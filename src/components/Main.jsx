@@ -11,6 +11,7 @@ import SearchSeries from './SearchSeries';
 import Cards from './Cards';
 import Category from './Category';
 import { motion } from 'framer-motion';
+import CategoryItems from './CategoryItems';
 const Main = ({ query, mod, gen, setGen }) => {
   let param = useParams();
   const { name } = param;
@@ -85,7 +86,7 @@ const Main = ({ query, mod, gen, setGen }) => {
           </Grid2>
         )}
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home gen={gen} />} />
           <Route
             path={`popularseries`}
             element={
@@ -195,37 +196,6 @@ const Main = ({ query, mod, gen, setGen }) => {
               path="category/movie"
               element={
                 <>
-                  <Box
-                    sx={{
-                      minWidth: '100%',
-                      mt: '-4rem',
-
-                      display: 'flex',
-                      justifyContent: 'center',
-                      justifySelf: 'center',
-                    }}
-                  >
-                    <Button
-                      sx={{
-                        color: '#dcdcdc',
-                        backgroundColor: '#ff4779',
-                        '&.MuiButton-root:hover': {
-                          backgroundColor: '#35185A',
-                        },
-                        '&.MuiButton-root': {
-                          border: 'none',
-                        },
-                      }}
-                      size="small"
-                      variant="outlined"
-                      onClick={() => {
-                        setGen('tv');
-                        navigate('category/tv');
-                      }}
-                    >
-                      category Series
-                    </Button>
-                  </Box>
                   <Category gen={gen} />
                 </>
               }
@@ -235,44 +205,13 @@ const Main = ({ query, mod, gen, setGen }) => {
               path="category/tv"
               element={
                 <>
-                  <Box
-                    sx={{
-                      minWidth: '100%',
-                      mt: '-4rem',
-
-                      display: 'flex',
-                      justifyContent: 'center',
-                      justifySelf: 'center',
-                    }}
-                  >
-                    <Button
-                      sx={{
-                        color: '#dcdcdc',
-                        backgroundColor: '#ff4779',
-                        '&.MuiButton-root:hover': {
-                          backgroundColor: '#35185A',
-                        },
-                        '&.MuiButton-root': {
-                          border: 'none',
-                        },
-                      }}
-                      size="small"
-                      variant="outlined"
-                      onClick={() => {
-                        setGen('movie');
-                        navigate('category/movie');
-                      }}
-                    >
-                      category Movies
-                    </Button>
-                  </Box>
                   <Category gen={gen} />
                 </>
               }
             />
           )}
-
-          <Route path="*" element={<Home />} />
+          <Route path="category/items" element={<CategoryItems />} />
+          <Route path="*" element={<Home gen={gen} />} />
         </Routes>
       </Grid2>
     </>
