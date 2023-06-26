@@ -112,106 +112,89 @@ const CardMovieDetails = ({ detailInfo }) => {
                     : `https://image.tmdb.org/t/p/w500/${detailInfo?.poster_path}`
                 }
               />{' '}
-              <Box sx={{ height: '100%' }}>
-                <Divider
-                  className="divider"
-                  sx={{ mt: '1rem', width: '100%' }}
-                />
-                <Box sx={{ mt: '1rem', ml: '0.8rem', top: '0' }}>
-                  <Typography
-                    color="secondary"
-                    variant="h5"
+              <Divider className="divider" sx={{ mt: '1rem', width: '100%' }} />
+              <Typography
+                color="secondary"
+                variant="h5"
+                sx={{
+                  wordWrap: 'break-word',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  lineClamp: 3,
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: 'vertical',
+                }}
+              >
+                {title}
+              </Typography>
+              <Typography variant="h6" color="#007E6B" sx={{ mt: '0.8rem' }}>
+                <span> Release date : </span> {release}
+              </Typography>
+              <Typography color="#882958" sx={{ mt: '0.5rem' }}>
+                MediaType :{' '}
+                {detailInfo.media_type === 'tv' ? 'Series' : 'Movie'}
+              </Typography>
+              <Typography color="#354954" sx={{ mt: '0.5rem' }}>
+                <span style={{ color: '#32184b' }}> Genres : </span>
+                {genre}
+              </Typography>
+              <Typography
+                color="#354954"
+                sx={{
+                  mt: '0.4rem',
+                  wordWrap: 'break-word',
+
+                  textAlign: 'justify',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  lineClamp: 6,
+                  WebkitLineClamp: 6,
+                  WebkitBoxOrient: 'vertical',
+                }}
+                variant="body1"
+              >
+                <Typography sx={{ color: '#32184b' }}> Overview : </Typography>
+
+                {detailInfo?.overview
+                  ? detailInfo.overview
+                  : ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur expedita ipsa minima officia autem earum cum atque eius ducimus sed, modi aliquid recusandae obcaecati sint mollitia placeat eum ipsum. Dolore.'}
+              </Typography>
+              <Box sx={{ display: 'grid', mt: '1rem' }}>
+                <div style={{ width: '100%' }}></div>
+                <Rating
+                  sx={{
+                    alignItems: 'center',
+                  }}
+                  name="read-only"
+                  value={detailInfo?.vote_average}
+                  readOnly
+                  max={10}
+                  precision={0.5}
+                ></Rating>{' '}
+                <Box
+                  sx={{
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    mb: '1rem',
+                  }}
+                >
+                  <Avatar
                     sx={{
-                      wordWrap: 'break-word',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
-                      lineClamp: 1,
-                      WebkitLineClamp: 1,
-                      WebkitBoxOrient: 'vertical',
+                      backgroundColor: '#FFD700',
+                      width: 35,
+                      height: 35,
+                      mt: '0.8rem',
                     }}
                   >
-                    {title}
-                  </Typography>
-
-                  <Typography
-                    variant="h6"
-                    color="#007E6B"
-                    sx={{ mt: '0.8rem' }}
-                  >
-                    <span> Release date : </span> {release}
-                  </Typography>
-                  <Typography color="#882958" sx={{ mt: '0.5rem' }}>
-                    MediaType :{' '}
-                    {detailInfo.media_type === 'tv' ? 'Series' : 'Movie'}
-                  </Typography>
-                  <Typography color="#354954" sx={{ mt: '0.5rem' }}>
-                    <span style={{ color: '#32184b' }}> Genres : </span>
-                    {genre}
-                  </Typography>
-
-                  <Typography
-                    color="#354954"
-                    sx={{
-                      mt: '0.4rem',
-                      wordWrap: 'break-word',
-                      maxHeight: '3rem',
-                      textAlign: 'justify',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
-                      lineClamp: 2,
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                    }}
-                    variant="body1"
-                  >
-                    <Typography sx={{ color: '#32184b' }}>
+                    <span style={{ color: '#000', padding: '0.2rem' }}>
                       {' '}
-                      Overview :{' '}
-                    </Typography>
-
-                    {detailInfo?.overview
-                      ? detailInfo.overview
-                      : ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur expedita ipsa minima officia autem earum cum atque eius ducimus sed, modi aliquid recusandae obcaecati sint mollitia placeat eum ipsum. Dolore.'}
-                  </Typography>
-
-                  <Box sx={{ display: 'grid', mt: '1rem' }}>
-                    <div style={{ width: '100%' }}></div>
-                    <Rating
-                      sx={{
-                        alignItems: 'center',
-                      }}
-                      name="read-only"
-                      value={detailInfo?.vote_average}
-                      readOnly
-                      max={10}
-                      precision={0.5}
-                    ></Rating>{' '}
-                    <Box
-                      sx={{
-                        width: '100%',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        mb: '1rem',
-                      }}
-                    >
-                      <Avatar
-                        sx={{
-                          backgroundColor: '#FFD700',
-                          width: 35,
-                          height: 35,
-                          mt: '0.8rem',
-                        }}
-                      >
-                        <span style={{ color: '#000', padding: '0.2rem' }}>
-                          {' '}
-                          {detailInfo?.vote_average.toFixed(1)}
-                        </span>
-                      </Avatar>
-                    </Box>{' '}
-                  </Box>
-                </Box>
+                      {detailInfo?.vote_average.toFixed(1)}
+                    </span>
+                  </Avatar>
+                </Box>{' '}
               </Box>
             </Box>
           )}
